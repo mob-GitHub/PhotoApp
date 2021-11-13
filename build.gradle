@@ -3,7 +3,7 @@ buildscript {
     ext {
         android_version = '7.2.0-alpha02'
         kotlin_version = '1.5.31'
-        compose_ktx_version = '1.1.0-beta01'
+        compose_ktx_version = '1.1.0-beta02'
         hilt_version = '2.37'
     }
     repositories {
