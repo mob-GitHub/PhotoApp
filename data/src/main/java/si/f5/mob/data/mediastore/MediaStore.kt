@@ -13,13 +13,6 @@ import javax.inject.Inject
 class MediaStore @Inject constructor(
     @ActivityContext private val context: Context,
 ) {
-    companion object {
-        /**
-         * MediaStoreから1回あたりに取得する最大取得数
-         */
-        const val GET_IMAGE_MAX_ITEMS = 20
-    }
-
     private val contentResolver: ContentResolver = context.contentResolver
 
     /**
@@ -27,9 +20,7 @@ class MediaStore @Inject constructor(
      * 追加日時降順
      * https://developer.android.com/training/data-storage/shared/media
      */
-    fun getImages(
-        maxItems: Int = GET_IMAGE_MAX_ITEMS,
-    ): List<Image> {
+    fun getImages(): List<Image> {
         val imageList: MutableList<Image> = mutableListOf()
 
         val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
