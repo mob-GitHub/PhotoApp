@@ -5,6 +5,7 @@ buildscript {
         kotlin_version = '1.5.31'
         compose_ktx_version = '1.2.0-alpha03'
         hilt_version = '2.40.4'
+        timber_version = '4.7.1'
     }
     repositories {
         google()
