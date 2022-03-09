@@ -14,5 +14,6 @@ dependencyResolutionManagement {
 }
 rootProject.name = "PhotoApp"
 include ':app'
-include ':data'
 include ':common'
+include ':repository'
+include ':data:mediastore'
