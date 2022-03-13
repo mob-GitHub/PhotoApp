@@ -1,4 +1,4 @@
-package si.f5.mob.mediastore
+package si.f5.mob.mediastore.entity
 
 import android.net.Uri
 

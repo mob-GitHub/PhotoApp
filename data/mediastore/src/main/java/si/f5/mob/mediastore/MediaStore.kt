@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
 import dagger.hilt.android.qualifiers.ActivityContext
+import si.f5.mob.mediastore.entity.Image
 import timber.log.Timber
 import javax.inject.Inject
 
