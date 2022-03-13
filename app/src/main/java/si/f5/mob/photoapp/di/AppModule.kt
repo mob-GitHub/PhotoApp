@@ -15,5 +15,5 @@ object AppModule {
     @Singleton
     @Provides
     fun provideMediaStore(@ApplicationContext context: Context) =
-        si.f5.mob.mediastore.MediaStore(context)
+        MediaStore(context)
 }

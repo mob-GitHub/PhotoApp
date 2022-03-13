@@ -11,7 +11,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
-    lateinit var mediaStore: si.f5.mob.mediastore.MediaStore
+    lateinit var mediaStore: MediaStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
