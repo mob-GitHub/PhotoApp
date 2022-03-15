@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="si.f5.mob.photoapp">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
+        android:name=".PhotoApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

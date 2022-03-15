@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace 'si.f5.mob.common'
+    namespace 'si.f5.mob.repository'
     compileSdk 32
 
     defaultConfig {
@@ -34,10 +34,17 @@ android {
 }
 
 dependencies {
+    implementation project(":common")
+
+    // Timber
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
-    // Kotlin Coroutine
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    testImplementation 'junit:junit:4.13.2'
+
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
