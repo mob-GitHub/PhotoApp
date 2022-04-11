@@ -32,6 +32,8 @@ class MediaStore @Inject constructor(
         val projection = arrayOf(
             MediaStore.Images.Media._ID,
             MediaStore.Images.Media.DISPLAY_NAME,
+            MediaStore.Images.Media.WIDTH,
+            MediaStore.Images.Media.HEIGHT,
         )
 
         val sortOrder = "${MediaStore.Images.Media.DATE_ADDED} DESC"
@@ -43,6 +45,8 @@ class MediaStore @Inject constructor(
         query?.use { cursor ->
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
             val nameColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
+            val width = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.WIDTH)
+            val height = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.HEIGHT)
 
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
@@ -50,8 +54,9 @@ class MediaStore @Inject constructor(
                 val uri = ContentUris.withAppendedId(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id
                 )
+                val isVertical = width < height
 
-                val image = Image(uri, name)
+                val image = Image(id, uri, name, width, height, isVertical)
                 imageList.add(image)
                 Timber.d(image.toString())
             }
