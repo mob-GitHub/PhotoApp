@@ -14,18 +14,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import si.f5.mob.common.Config
 import si.f5.mob.mediastore.entity.Image
 import timber.log.Timber
 
 @Composable
 @ExperimentalFoundationApi
 fun PhotoGrid(imageList: List<Image>, navController: NavController) {
-    // TODO:Configクラスに移動する
-    val spanCount = 3
-    val cells = GridCells.Fixed(spanCount)
+    val cells = GridCells.Fixed(Config.PHOTO_GRID_SPAN_COUNT)
     val widthPixels = LocalContext.current.resources.displayMetrics.widthPixels.dp
     Timber.d("widthPixels = $widthPixels")
-    val spanWidth = (widthPixels / spanCount)
+    val spanWidth = (widthPixels / Config.PHOTO_GRID_SPAN_COUNT)
     Timber.d("spanWidth = $spanWidth")
     LazyVerticalGrid(cells = cells) {
         items(imageList) { image ->
