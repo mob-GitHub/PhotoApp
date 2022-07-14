@@ -1,3 +1,10 @@
+name: Lint
+
+on:
+  pull_request:
+    branches:
+      - feature/**
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -18,10 +25,10 @@ jobs:
     # アーティファクトアップロード
     - name: Upload results Artifact
       uses: actions/upload-artifact@v2
-      if: success() | failure()
+      if: success() || failure()
       with:
         name: results
-        path:
+        path: |
           **/build/reports/lint-results-*.html
           **/build/reports/lint-results-*.xml
         if-no-files-found: error
