@@ -8,13 +8,15 @@ on:
 
 jobs:
   lint:
+
     runs-on: ubuntu-latest
+
     steps:
     # チェックアウト
     - uses: actions/checkout@v2
     
     # 静的解析
-    - uses: Run Inspection
+    - name: Run Inspection
       run: ./gradlew lint
       
     # 結果の表示
