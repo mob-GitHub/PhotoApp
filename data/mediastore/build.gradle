@@ -29,12 +29,12 @@ android {
     }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11
-        useIR = true
     }
 }
 
 dependencies {
     implementation project(":common")
+    implementation project(":test")
 
     // Timber
     implementation "com.jakewharton.timber:timber:$timber_version"
