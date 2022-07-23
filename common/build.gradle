@@ -35,10 +35,13 @@ android {
 dependencies {
     testImplementation project(":test")
 
+    // Timber
+    api "com.jakewharton.timber:timber:$timber_version"
+
     // Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // Kotlin Coroutine
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
 }
