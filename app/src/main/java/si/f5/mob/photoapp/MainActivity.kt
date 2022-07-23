@@ -3,9 +3,9 @@ package si.f5.mob.photoapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
             MaterialTheme {
                 Scaffold(topBar = { PhotoAppTopAppBar() }) {
                     val navController = rememberNavController()
-                    val mainViewModel: MainViewModel = hiltViewModel()
+                    val mainViewModel: MainViewModel by viewModels()
                     NavHost(navController = navController, startDestination = "main") {
                         composable("main") {
                             MainScreen(mainViewModel, navController)
