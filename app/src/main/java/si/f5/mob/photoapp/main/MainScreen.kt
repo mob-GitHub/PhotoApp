@@ -2,12 +2,14 @@ package si.f5.mob.photoapp.main
 
 import android.Manifest
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
@@ -45,9 +47,13 @@ fun MainScreen(viewModel: MainViewModel, navController: NavController) {
         }
     }
 
-    Scaffold {
+    Scaffold { paddingValues ->
         imageList.value?.let {
-            PhotoGrid(imageList = it, navController = navController)
+            PhotoGrid(
+                modifier = Modifier.padding(paddingValues.calculateBottomPadding()),
+                imageList = it,
+                navController = navController
+            )
         }
     }
 }
