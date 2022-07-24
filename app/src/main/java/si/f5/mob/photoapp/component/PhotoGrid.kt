@@ -20,13 +20,16 @@ import timber.log.Timber
 
 @Composable
 @ExperimentalFoundationApi
-fun PhotoGrid(imageList: List<Image>, navController: NavController) {
+fun PhotoGrid(modifier: Modifier, imageList: List<Image>, navController: NavController) {
     val cells = GridCells.Fixed(Config.PHOTO_GRID_SPAN_COUNT)
     val widthPixels = LocalContext.current.resources.displayMetrics.widthPixels.dp
     Timber.d("widthPixels = $widthPixels")
     val spanWidth = (widthPixels / Config.PHOTO_GRID_SPAN_COUNT)
     Timber.d("spanWidth = $spanWidth")
-    LazyVerticalGrid(cells) {
+    LazyVerticalGrid(
+        cells,
+        modifier = modifier
+    ) {
         items(imageList) { image ->
             AsyncImage(
                 model = image.uri,

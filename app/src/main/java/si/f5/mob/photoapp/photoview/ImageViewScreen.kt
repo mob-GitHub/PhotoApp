@@ -2,6 +2,7 @@ package si.f5.mob.photoapp.photoview
 
 import android.net.Uri
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -13,7 +14,7 @@ import coil.compose.AsyncImage
 
 @Composable
 fun ImageViewScreen(navController: NavController, imageUri: Uri?) {
-    Scaffold {
+    Scaffold { paddingValues ->
         if (imageUri == null) {
             AlertDialog(
                 onDismissRequest = {},
@@ -28,7 +29,13 @@ fun ImageViewScreen(navController: NavController, imageUri: Uri?) {
                     }
                 })
         } else {
-            AsyncImage(model = imageUri, contentDescription = "", modifier = Modifier.fillMaxSize())
+            AsyncImage(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues.calculateBottomPadding()),
+                model = imageUri,
+                contentDescription = ""
+            )
         }
     }
 }
