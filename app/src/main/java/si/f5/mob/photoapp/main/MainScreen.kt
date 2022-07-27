@@ -13,6 +13,7 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -66,6 +67,7 @@ fun MainScreen(viewModel: MainViewModel, navController: NavController) {
                             model = image.uri,
                             contentDescription = image.name,
                             contentScale = ContentScale.None,
+                            filterQuality = FilterQuality.None,
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .clickable {
