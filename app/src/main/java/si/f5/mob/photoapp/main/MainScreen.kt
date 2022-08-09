@@ -66,7 +66,7 @@ fun MainScreen(viewModel: MainViewModel, navController: NavController) {
                         AsyncImage(
                             model = image.uri,
                             contentDescription = image.name,
-                            contentScale = ContentScale.None,
+                            contentScale = ContentScale.Crop,
                             filterQuality = FilterQuality.None,
                             modifier = Modifier
                                 .aspectRatio(1f)
