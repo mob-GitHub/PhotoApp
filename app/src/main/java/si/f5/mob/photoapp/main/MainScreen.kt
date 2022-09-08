@@ -1,8 +1,11 @@
 package si.f5.mob.photoapp.main
 
 import android.Manifest
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -10,16 +13,17 @@ import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
-import si.f5.mob.photoapp.component.PhotoGrid
+import si.f5.mob.common.Config
 
-@OptIn(
-    ExperimentalFoundationApi::class,
-    ExperimentalPermissionsApi::class
-)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen(viewModel: MainViewModel, navController: NavController) {
     val imageList = viewModel.imageList.observeAsState()
@@ -48,12 +52,31 @@ fun MainScreen(viewModel: MainViewModel, navController: NavController) {
     }
 
     Scaffold { paddingValues ->
-        imageList.value?.let {
-            PhotoGrid(
-                modifier = Modifier.padding(paddingValues.calculateBottomPadding()),
-                imageList = it,
-                navController = navController
-            )
+        BoxWithConstraints {
+            imageList.value?.let {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(Config.PHOTO_GRID_SPAN_COUNT),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues.calculateBottomPadding()),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    items(items = it) { image ->
+                        AsyncImage(
+                            model = image.uri,
+                            contentDescription = image.name,
+                            contentScale = ContentScale.Crop,
+                            filterQuality = FilterQuality.None,
+                            modifier = Modifier
+                                .aspectRatio(1f)
+                                .clickable {
+                                    navController.navigate("imageview/${image.id}")
+                                }
+                        )
+                    }
+                }
+            }
         }
     }
 }
