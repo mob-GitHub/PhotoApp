@@ -90,3 +90,7 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+# Android KeyStore
+*.pepk
+*.jks

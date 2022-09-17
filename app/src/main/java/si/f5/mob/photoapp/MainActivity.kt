@@ -4,8 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,10 +23,14 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                Scaffold(topBar = { PhotoAppTopAppBar() }) {
+                Scaffold(topBar = { PhotoAppTopAppBar() }) { paddingValues ->
                     val navController = rememberNavController()
                     val mainViewModel: MainViewModel by viewModels()
-                    NavHost(navController = navController, startDestination = "main") {
+                    NavHost(
+                        modifier = Modifier.padding(paddingValues),
+                        navController = navController,
+                        startDestination = "main"
+                    ) {
                         composable("main") {
                             MainScreen(mainViewModel, navController)
                         }
