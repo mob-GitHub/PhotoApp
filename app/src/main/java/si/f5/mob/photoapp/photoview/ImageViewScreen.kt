@@ -9,12 +9,15 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import timber.log.Timber
+import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
 @Composable
@@ -61,15 +64,30 @@ private fun ImageView(imageUri: Uri?) {
         .pointerInput(Unit) {
             detectTransformGestures { _, _, zoom, _ ->
                 scale = maxOf(1f, scale * zoom)
+                if (scale == 1f) {
+                    // 初期位置へ戻す
+                    offsetX = 0f
+                    offsetY = 0f
+                }
             }
-        }
-    ) {
+        }) {
         AsyncImage(modifier = Modifier
+            .align(Alignment.Center)
             .pointerInput(Unit) {
                 detectDragGestures { change, dragAmount ->
-                    change.consume()
-                    offsetX += dragAmount.x
-                    offsetY += dragAmount.y
+                    val maxOffsetX = size.width / 2 / scale
+                    val maxOffsetY = size.height / 2 / scale
+                    if (scale > 1f) {
+                        change.consume()
+                        if ((offsetX + dragAmount.x).absoluteValue < maxOffsetX) {
+                            offsetX += dragAmount.x
+                        }
+                        if ((offsetY + dragAmount.y).absoluteValue < maxOffsetY) {
+                            offsetY += dragAmount.y
+                        }
+                        Timber.d("maxOffsetX = $maxOffsetX maxOffsetY = $maxOffsetY")
+                        Timber.d("x = $offsetX  y = $offsetY width = ${size.width} height = ${size.height} scale = $scale")
+                    }
                 }
             }
             .graphicsLayer {
