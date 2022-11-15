@@ -11,5 +11,4 @@ data class Image(
     val name: String,
     val width: Int,
     val height: Int,
-    val isVertical: Boolean,
 )
