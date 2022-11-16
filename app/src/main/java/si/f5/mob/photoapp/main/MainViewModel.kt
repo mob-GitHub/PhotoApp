@@ -1,8 +1,9 @@
 package si.f5.mob.photoapp.main
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import si.f5.mob.mediastore.MediaStore
 import si.f5.mob.mediastore.entity.Image
@@ -11,9 +12,11 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val mediaStore: MediaStore,
-) : ViewModel() {
+    application: Application
+) : AndroidViewModel(application) {
     private val _imageList = MutableLiveData<List<Image>>(listOf())
-    val imageList: LiveData<List<Image>> = _imageList
+    val imageList: LiveData<List<Image>>
+        get() = _imageList
 
     fun getImageList() {
         val imageList = mediaStore.getImages()

@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -25,15 +26,15 @@ import si.f5.mob.common.Config
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun MainScreen(viewModel: MainViewModel, navController: NavController) {
-    val imageList = viewModel.imageList.observeAsState()
+fun MainScreen(mainViewModel: MainViewModel = hiltViewModel(), navController: NavController) {
+    val imageList = mainViewModel.imageList.observeAsState()
 
     // 権限チェック
     val permissionState =
         rememberPermissionState(permission = Manifest.permission.READ_EXTERNAL_STORAGE)
     when (permissionState.status) {
         PermissionStatus.Granted -> {
-            viewModel.getImageList()
+            mainViewModel.getImageList()
         }
         is PermissionStatus.Denied -> {
             AlertDialog(
@@ -71,7 +72,7 @@ fun MainScreen(viewModel: MainViewModel, navController: NavController) {
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .clickable {
-                                    navController.navigate("imageview/${image.id}")
+                                    navController.navigate("photoview/${image.id}")
                                 }
                         )
                     }
