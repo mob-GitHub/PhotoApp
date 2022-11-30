@@ -48,7 +48,6 @@ android {
 
 dependencies {
     implementation project(":common")
-    implementation project(":test")
     implementation project(":data:mediastore")
 
     implementation 'androidx.core:core-ktx:1.9.0'
@@ -85,4 +84,6 @@ dependencies {
     // Coil
     implementation "io.coil-kt:coil:1.0.0"
     implementation "io.coil-kt:coil-compose:2.0.0-rc02"
+
+    testImplementation project(":test")
 }
