@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
     namespace 'si.f5.mob.photoapp'
 
     defaultConfig {
         applicationId "si.f5.mob.photoapp"
-        minSdk 24
-        targetSdk 32
+        minSdk 26
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -51,9 +51,9 @@ dependencies {
     implementation project(":test")
     implementation project(":data:mediastore")
 
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "com.google.accompanist:accompanist-permissions:0.24.13-rc"
 
@@ -71,8 +71,8 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_ktx_version"
     implementation "androidx.compose.material:material-icons-core:$compose_ktx_version"
     implementation "androidx.compose.material:material-icons-extended:$compose_ktx_version"
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0'
-    implementation 'androidx.activity:activity-compose:1.5.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
+    implementation 'androidx.activity:activity-compose:1.6.1'
     implementation "androidx.compose.runtime:runtime-livedata:$compose_ktx_version"
 
     // Navigation
