@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
+    compileSdk buildConfig.compileSdk
     namespace 'si.f5.mob.mediastore'
-    compileSdk 33
 
     defaultConfig {
-        minSdk 24
-        targetSdk 33
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.compileSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -36,8 +36,8 @@ dependencies {
     implementation project(":common")
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "com.google.dagger:hilt-android:${versions.hilt}"
+    kapt "com.google.dagger:hilt-android-compiler:${versions.hilt}"
 
     testImplementation project(":test")
 }
