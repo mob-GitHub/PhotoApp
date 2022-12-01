@@ -7,19 +7,18 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk buildConfig.compileSdk
     namespace 'si.f5.mob.photoapp'
 
     defaultConfig {
         applicationId "si.f5.mob.photoapp"
-        minSdk 24
-        targetSdk 32
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.compileSdk
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildFeatures {
         compose true
     }
@@ -48,41 +47,42 @@ android {
 
 dependencies {
     implementation project(":common")
-    implementation project(":test")
     implementation project(":data:mediastore")
 
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation "com.google.accompanist:accompanist-permissions:0.24.13-rc"
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "com.google.dagger:hilt-android:${versions.hilt}"
+    kapt "com.google.dagger:hilt-android-compiler:${versions.hilt}"
     kapt "androidx.hilt:hilt-compiler:1.0.0"
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     // Jetpack Compose
-    implementation "androidx.compose.ui:ui:$compose_ktx_version"
-    implementation "androidx.compose.ui:ui-tooling:$compose_ktx_version"
-    implementation "androidx.compose.animation:animation:$compose_ktx_version"
-    implementation "androidx.compose.foundation:foundation:$compose_ktx_version"
-    implementation "androidx.compose.material:material:$compose_ktx_version"
-    implementation "androidx.compose.material:material-icons-core:$compose_ktx_version"
-    implementation "androidx.compose.material:material-icons-extended:$compose_ktx_version"
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0'
-    implementation 'androidx.activity:activity-compose:1.5.0'
-    implementation "androidx.compose.runtime:runtime-livedata:$compose_ktx_version"
+    implementation "androidx.compose.ui:ui:${versions.compose}"
+    implementation "androidx.compose.ui:ui-tooling:${versions.compose}"
+    implementation "androidx.compose.animation:animation:${versions.compose}"
+    implementation "androidx.compose.foundation:foundation:${versions.compose}"
+    implementation "androidx.compose.material:material:${versions.compose}"
+    implementation "androidx.compose.material:material-icons-core:${versions.compose}"
+    implementation "androidx.compose.material:material-icons-extended:${versions.compose}"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
+    implementation 'androidx.activity:activity-compose:1.6.1'
+    implementation "androidx.compose.runtime:runtime-livedata:${versions.compose}"
 
     // Navigation
-    implementation "androidx.navigation:navigation-compose:$navigation_version"
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-runtime-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-dynamic-features-fragment:$navigation_version"
+    implementation "androidx.navigation:navigation-compose:${versions.navigation}"
+    implementation "androidx.navigation:navigation-fragment-ktx:${versions.navigation}"
+    implementation "androidx.navigation:navigation-ui-ktx:${versions.navigation}"
+    implementation "androidx.navigation:navigation-runtime-ktx:${versions.navigation}"
+    implementation "androidx.navigation:navigation-dynamic-features-fragment:${versions.navigation}"
 
     // Coil
     implementation "io.coil-kt:coil:1.0.0"
     implementation "io.coil-kt:coil-compose:2.0.0-rc02"
+
+    testImplementation project(":test")
 }

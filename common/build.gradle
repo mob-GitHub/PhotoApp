@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
+    compileSdk buildConfig.compileSdk
     namespace 'si.f5.mob.common'
-    compileSdk 32
 
     defaultConfig {
-        minSdk 24
-        targetSdk 32
+        minSdk buildConfig.minSdk
+        targetSdk buildConfig.compileSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -33,15 +33,15 @@ android {
 }
 
 dependencies {
-    testImplementation project(":test")
-
     // Timber
-    api "com.jakewharton.timber:timber:$timber_version"
+    api "com.jakewharton.timber:timber:${versions.timber}"
 
     // Hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation "com.google.dagger:hilt-android:${versions.hilt}"
+    kapt "com.google.dagger:hilt-android-compiler:${versions.hilt}"
 
     // Kotlin Coroutine
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
+
+    testImplementation project(":test")
 }
