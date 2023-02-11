@@ -15,18 +15,35 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import si.f5.mob.photoapp.PhotoAppTopAppBar
+import si.f5.mob.photoapp.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhotoViewScreen(
-    photoViewViewModel: PhotoViewViewModel = hiltViewModel(), imageId: Long?
+    photoViewViewModel: PhotoViewViewModel = hiltViewModel(),
+    navController: NavController,
+    imageId: Long?
 ) {
     val imageBitmap: Bitmap? by photoViewViewModel.imageBitmap.observeAsState()
 
     photoViewViewModel.getImageBitmap(imageId = imageId)
 
-    Scaffold { paddingValues ->
+    Scaffold(topBar = {
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        val navButtonVisible = navBackStackEntry?.destination?.route != Screen.PhotoView.route
+        PhotoAppTopAppBar(
+            title = LocalContext.current.getString(Screen.PhotoView.resourceId),
+            navButtonVisible = navButtonVisible,
+            navButtonOnClick = {
+                navController.popBackStack()
+            },
+        )
+    }) { paddingValues ->
         BoxWithConstraints(modifier = Modifier.padding(paddingValues)) {
             when (imageBitmap) {
                 null -> {

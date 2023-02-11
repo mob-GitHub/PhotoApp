@@ -1,14 +1,28 @@
 package si.f5.mob.photoapp
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PhotoAppTopAppBar() {
+fun PhotoAppTopAppBar(
+    title: String,
+    navButtonVisible: Boolean,
+    navButtonOnClick: () -> Unit = {},
+) {
+    val navigationIcon: @Composable () -> Unit = if (navButtonVisible) {
+        {
+            IconButton(onClick = navButtonOnClick) {
+                Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back")
+            }
+        }
+    } else {
+        {}
+    }
     TopAppBar(
-        title = { Text(text = "PhotoApp") }
+        title = { Text(text = title) },
+        navigationIcon = navigationIcon
     )
 }

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PhotoApp</string>
+
+    <!-- スクリーン名 -->
+    <string name="screen_main">端末内の画像一覧</string>
+    <string name="screen_photo_view">ビューア</string>
 </resources>

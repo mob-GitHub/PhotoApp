@@ -23,20 +23,22 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                Scaffold(topBar = { PhotoAppTopAppBar() }) { paddingValues ->
+                Scaffold { paddingValues ->
                     val navController = rememberNavController()
                     NavHost(
                         modifier = Modifier.padding(paddingValues),
                         navController = navController,
-                        startDestination = "main"
+                        startDestination = Screen.Main.route
                     ) {
-                        composable("main") {
+                        composable(Screen.Main.route) {
                             MainScreen(navController = navController)
                         }
-                        composable("photoview/{imageId}") { navBackStackEntry ->
-                            val imageId =
-                                navBackStackEntry.arguments?.getString("imageId")?.toLong()
-                            PhotoViewScreen(imageId = imageId)
+                        composable("${Screen.PhotoView.route}/{imageId}") {
+                            val imageId = it.arguments?.getString("imageId")?.toLong()
+                            PhotoViewScreen(
+                                navController = navController,
+                                imageId = imageId
+                            )
                         }
                     }
                 }
