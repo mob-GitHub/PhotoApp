@@ -51,7 +51,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "com.google.accompanist:accompanist-permissions:0.24.13-rc"
+    implementation "com.google.accompanist:accompanist-permissions:0.29.1-alpha"
 
     // Hilt
     implementation "com.google.dagger:hilt-android:${versions.hilt}"
