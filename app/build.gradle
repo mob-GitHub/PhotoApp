@@ -1,7 +1,6 @@
 plugins {
-    id 'kotlin-android'
-    id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.kapt'
     id 'com.android.application'
     id 'dagger.hilt.android.plugin'
 }
