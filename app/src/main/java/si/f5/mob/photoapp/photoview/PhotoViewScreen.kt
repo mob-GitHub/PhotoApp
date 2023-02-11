@@ -15,7 +15,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -38,7 +38,7 @@ fun PhotoViewScreen(
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val navButtonVisible = navBackStackEntry?.destination?.route != Screen.PhotoView.route
         PhotoAppTopAppBar(
-            title = LocalContext.current.getString(Screen.PhotoView.resourceId),
+            title = stringResource(Screen.PhotoView.resourceId),
             navButtonVisible = navButtonVisible,
             navButtonOnClick = {
                 navController.popBackStack()
