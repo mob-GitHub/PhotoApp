@@ -29,6 +29,7 @@ fun PhotoViewScreen(
     navController: NavController,
     imageId: Long?
 ) {
+    val error by photoViewViewModel.error.observeAsState()
     val imageBitmap: Bitmap? by photoViewViewModel.imageBitmap.observeAsState()
 
     photoViewViewModel.getImageBitmap(imageId = imageId)
@@ -45,16 +46,30 @@ fun PhotoViewScreen(
         )
     }) { paddingValues ->
         BoxWithConstraints(modifier = Modifier.padding(paddingValues)) {
-            when (imageBitmap) {
-                null -> {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(
-                            modifier = Modifier.align(Alignment.Center), text = "画像が取得できませんでした"
-                        )
+            if (error == null) {
+                when (imageBitmap) {
+                    null -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                modifier = Modifier.align(Alignment.Center), text = "読み込み中..."
+                            )
+                        }
+                    }
+                    else -> {
+                        ImageView(bitmap = imageBitmap!!)
                     }
                 }
-                else -> {
-                    ImageView(bitmap = imageBitmap!!)
+            } else {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        modifier = Modifier.align(Alignment.Center), text = "画像の読み込みに失敗しました。"
+                    )
                 }
             }
         }

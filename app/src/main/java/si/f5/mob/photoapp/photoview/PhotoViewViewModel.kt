@@ -3,7 +3,6 @@ package si.f5.mob.photoapp.photoview
 import android.app.Application
 import android.graphics.Bitmap
 import androidx.core.graphics.drawable.toBitmapOrNull
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,6 +13,7 @@ import coil.request.SuccessResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import si.f5.mob.mediastore.MediaStore
+import si.f5.mob.photoapp.BaseViewModel
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class PhotoViewViewModel @Inject constructor(
     private val mediaStore: MediaStore,
     application: Application
-) : AndroidViewModel(application) {
+) : BaseViewModel(application) {
     private val _imageBitmap = MutableLiveData<Bitmap?>()
     val imageBitmap: LiveData<Bitmap?>
         get() = _imageBitmap
@@ -46,10 +46,11 @@ class PhotoViewViewModel @Inject constructor(
                 result.drawable
             }
             is ErrorResult -> {
-                throw IllegalStateException("画像取得に失敗")
+                setError(IllegalStateException("画像取得に失敗"))
+                null
             }
         }
 
-        _imageBitmap.postValue(result.toBitmapOrNull())
+        _imageBitmap.postValue(result?.toBitmapOrNull())
     }
 }
