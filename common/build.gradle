@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
+    id 'org.jetbrains.kotlin.kapt'
     id 'dagger.hilt.android.plugin'
 }
 
@@ -24,11 +24,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility buildConfig.compatibility
+        targetCompatibility buildConfig.compatibility
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
+        jvmTarget = buildConfig.jvmTarget
     }
 }
 

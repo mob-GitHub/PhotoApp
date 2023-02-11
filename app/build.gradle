@@ -1,7 +1,6 @@
 plugins {
-    id 'kotlin-android'
-    id 'kotlin-kapt'
     id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.kapt'
     id 'com.android.application'
     id 'dagger.hilt.android.plugin'
 }
@@ -23,7 +22,7 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0"
+        kotlinCompilerExtensionVersion = "1.4.2"
     }
     buildTypes {
         release {
@@ -36,11 +35,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility buildConfig.compatibility
+        targetCompatibility buildConfig.compatibility
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
+        jvmTarget = buildConfig.jvmTarget
         freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
     }
 }
@@ -50,10 +49,8 @@ dependencies {
     implementation project(":data:mediastore")
 
     implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "com.google.accompanist:accompanist-permissions:0.24.13-rc"
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation "com.google.accompanist:accompanist-permissions:0.29.1-alpha"
 
     // Hilt
     implementation "com.google.dagger:hilt-android:${versions.hilt}"
@@ -62,16 +59,17 @@ dependencies {
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
     // Jetpack Compose
-    implementation "androidx.compose.ui:ui:${versions.compose}"
-    implementation "androidx.compose.ui:ui-tooling:${versions.compose}"
-    implementation "androidx.compose.animation:animation:${versions.compose}"
-    implementation "androidx.compose.foundation:foundation:${versions.compose}"
-    implementation "androidx.compose.material:material:${versions.compose}"
-    implementation "androidx.compose.material:material-icons-core:${versions.compose}"
-    implementation "androidx.compose.material:material-icons-extended:${versions.compose}"
+    def composeBom = platform('androidx.compose:compose-bom:2023.01.00')
+    implementation composeBom
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-tooling'
+    implementation 'androidx.compose.animation:animation'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.material:material-icons-core'
+    implementation 'androidx.compose.material:material-icons-extended'
+    implementation 'androidx.compose.runtime:runtime-livedata'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
     implementation 'androidx.activity:activity-compose:1.6.1'
-    implementation "androidx.compose.runtime:runtime-livedata:${versions.compose}"
 
     // Navigation
     implementation "androidx.navigation:navigation-compose:${versions.navigation}"
@@ -81,8 +79,8 @@ dependencies {
     implementation "androidx.navigation:navigation-dynamic-features-fragment:${versions.navigation}"
 
     // Coil
-    implementation "io.coil-kt:coil:1.0.0"
-    implementation "io.coil-kt:coil-compose:2.0.0-rc02"
+    implementation "io.coil-kt:coil:${versions.coil}"
+    implementation "io.coil-kt:coil-compose:${versions.coil}"
 
     testImplementation project(":test")
 }
