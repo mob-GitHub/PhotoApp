@@ -62,7 +62,7 @@ fun PhotoViewScreen(
                         }
                     }
                     else -> {
-                        EditImageView(bitmap = imageBitmap!!)
+                        ImageView(bitmap = imageBitmap!!)
                     }
                 }
             } else {
@@ -79,12 +79,37 @@ fun PhotoViewScreen(
     }
 }
 
+@Composable
+private fun ImageView(bitmap: Bitmap) {
+    Canvas(
+        modifier = Modifier
+            .aspectRatio(1f)
+            .padding(all = 10.dp)
+            .border(width = 1.dp, color = Color.Gray)
+    ) {
+        // 背景
+        drawRect(color = Color.White, size = size)
+        val imageSize = IntSize(size.width.toInt() / 2 - 50, size.height.toInt() / 2 - 50)
+        drawImage(
+            image = bitmap.asImageBitmap(),
+            srcSize = imageSize,
+            dstOffset = IntOffset(50, 50)
+        )
+        drawImage(
+            image = bitmap.asImageBitmap(),
+            srcSize = imageSize,
+            dstOffset = IntOffset(imageSize.width + 50, imageSize.height + 50)
+        )
+    }
+}
+
 /**
  * 編集用ImageView
  * 自由に動かすことができる
  */
 @Composable
 private fun EditImageView(bitmap: Bitmap) {
+    // TODO:後で実際にトリミング用の設定にする
     val imageSize = IntSize(500, 500)
     var offset by remember { mutableStateOf(IntOffset(50, 50)) }
 
