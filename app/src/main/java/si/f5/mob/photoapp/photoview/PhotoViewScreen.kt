@@ -3,7 +3,9 @@ package si.f5.mob.photoapp.photoview
 import android.graphics.Bitmap
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -16,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
@@ -80,26 +83,35 @@ fun PhotoViewScreen(
 }
 
 @Composable
-private fun ImageView(bitmap: Bitmap) {
+private fun ImageView(
+    bitmap: Bitmap,
+    viewModel: PhotoViewViewModel = hiltViewModel(),
+) {
     Canvas(
         modifier = Modifier
             .aspectRatio(1f)
             .padding(all = 10.dp)
             .border(width = 1.dp, color = Color.Gray)
+            .clickable(role = Role.Image, onClick = {})
+            .pointerInput(Unit) {
+                detectTapGestures { offset ->
+                    viewModel.onClickedCanvas(offset)
+                }
+            }
     ) {
+        // ViewModelにCanvasサイズを通知
+        viewModel.setCanvasSize(size)
+
         // 背景
         drawRect(color = Color.White, size = size)
-        val imageSize = IntSize(size.width.toInt() / 2 - 50, size.height.toInt() / 2 - 50)
-        drawImage(
-            image = bitmap.asImageBitmap(),
-            srcSize = imageSize,
-            dstOffset = IntOffset(50, 50)
-        )
-        drawImage(
-            image = bitmap.asImageBitmap(),
-            srcSize = imageSize,
-            dstOffset = IntOffset(imageSize.width + 50, imageSize.height + 50)
-        )
+
+        viewModel.getImageFrames().forEach { frame ->
+            drawImage(
+                image = bitmap.asImageBitmap(),
+                srcSize = frame.size,
+                dstOffset = IntOffset(frame.originPoint.x, frame.originPoint.y)
+            )
+        }
     }
 }
 
