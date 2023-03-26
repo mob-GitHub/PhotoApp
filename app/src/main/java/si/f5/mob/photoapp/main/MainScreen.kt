@@ -12,6 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -20,6 +21,8 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import si.f5.mob.common.Config
+import si.f5.mob.photoapp.PhotoAppTopAppBar
+import si.f5.mob.photoapp.Screen
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -49,14 +52,19 @@ fun MainScreen(mainViewModel: MainViewModel = hiltViewModel(), navController: Na
         }
     }
 
-    Scaffold { paddingValues ->
+    Scaffold(topBar = {
+        PhotoAppTopAppBar(
+            title = stringResource(Screen.Main.resourceId),
+            navButtonVisible = false
+        )
+    }) { paddingValues ->
         BoxWithConstraints {
             imageList.value?.let {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(Config.PHOTO_GRID_SPAN_COUNT),
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(paddingValues.calculateBottomPadding()),
+                        .padding(paddingValues),
                     verticalArrangement = Arrangement.spacedBy(2.dp),
                     horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
