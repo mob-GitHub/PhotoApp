@@ -28,14 +28,19 @@ class PhotoViewViewModel @Inject constructor(
 ) : BaseViewModel(application) {
 
     data class ImageFrame(
+        val bitmap: Bitmap,
         val size: IntSize,
         val originPoint: Point,
         val diagonalPoint: Point = Point(originPoint.x + size.width, originPoint.y + size.height),
     )
 
-    private val _imageBitmap = MutableLiveData<Bitmap?>()
-    val imageBitmap: LiveData<Bitmap?>
-        get() = _imageBitmap
+    private val _imageBitmap1 = MutableLiveData<Bitmap?>()
+    val imageBitmap1: LiveData<Bitmap?>
+        get() = _imageBitmap1
+
+    private val _imageBitmap2 = MutableLiveData<Bitmap?>()
+    val imageBitmap2: LiveData<Bitmap?>
+        get() = _imageBitmap2
 
     private var _canvasSize: Size = Size(0F, 0F)
 
@@ -43,22 +48,38 @@ class PhotoViewViewModel @Inject constructor(
     val clickedImageId: LiveData<Long?>
         get() = _clickedImageId
 
-    fun getImageBitmap(imageId: Long?) = viewModelScope.launch {
-        if (imageId == null) {
-            _imageBitmap.postValue(null)
+    fun getImageBitmap(imageId1: Long?, imageId2: Long?) = viewModelScope.launch {
+        if (imageId1 == null || imageId2 == null) {
+            _imageBitmap1.postValue(null)
+            _imageBitmap2.postValue(null)
         }
 
-        val image = mediaStore.getImageUriById(imageId!!)
-        if (image == null) {
-            _imageBitmap.postValue(null)
+        val image1 = mediaStore.getImageUriById(imageId1!!)
+        val image2 = mediaStore.getImageUriById(imageId2!!)
+        if (image1 == null || image2 == null) {
+            _imageBitmap1.postValue(null)
+            _imageBitmap2.postValue(null)
         }
 
-        Timber.d("Image(id = ${image!!.id}, uri = ${image.uri}, name = ${image.name}, width = ${image.width}, height = ${image.height})")
+        Timber.d("Image1(id = ${image1!!.id}, uri = ${image1.uri}, name = ${image1.name}, width = ${image1.width}, height = ${image1.height})")
+        Timber.d("Image2(id = ${image2!!.id}, uri = ${image2.uri}, name = ${image2.name}, width = ${image2.width}, height = ${image2.height})")
 
-        val request = ImageRequest.Builder(getApplication())
-            .data(image.uri)
+        val request1 = ImageRequest.Builder(getApplication())
+            .data(image1.uri)
             .build()
-        val result = when (val result = ImageLoader(getApplication()).execute(request)) {
+        val result1 = when (val result = ImageLoader(getApplication()).execute(request1)) {
+            is SuccessResult -> {
+                result.drawable
+            }
+            is ErrorResult -> {
+                setError(IllegalStateException("画像取得に失敗"))
+                null
+            }
+        }
+        val request2 = ImageRequest.Builder(getApplication())
+            .data(image2.uri)
+            .build()
+        val result2 = when (val result = ImageLoader(getApplication()).execute(request2)) {
             is SuccessResult -> {
                 result.drawable
             }
@@ -68,7 +89,8 @@ class PhotoViewViewModel @Inject constructor(
             }
         }
 
-        _imageBitmap.postValue(result?.toBitmapOrNull())
+        _imageBitmap1.postValue(result1?.toBitmapOrNull())
+        _imageBitmap2.postValue(result2?.toBitmapOrNull())
     }
 
     fun onClickedCanvas(offset: Offset) {
@@ -86,8 +108,9 @@ class PhotoViewViewModel @Inject constructor(
     }
 
     fun getImageFrames() = listOf(
-        ImageFrame(getImageSize(_canvasSize), Point(50, 50)),
+        ImageFrame(imageBitmap1.value!!, getImageSize(_canvasSize), Point(50, 50)),
         ImageFrame(
+            imageBitmap2.value!!,
             getImageSize(_canvasSize),
             Point(getImageSize(_canvasSize).width + 50, getImageSize(_canvasSize).height + 50)
         )

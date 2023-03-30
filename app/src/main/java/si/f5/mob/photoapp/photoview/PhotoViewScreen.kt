@@ -33,12 +33,14 @@ import si.f5.mob.photoapp.Screen
 fun PhotoViewScreen(
     photoViewViewModel: PhotoViewViewModel = hiltViewModel(),
     navController: NavController,
-    imageId: Long?
+    imageId1: Long?,
+    imageId2: Long?
 ) {
     val error by photoViewViewModel.error.observeAsState()
-    val imageBitmap: Bitmap? by photoViewViewModel.imageBitmap.observeAsState()
+    val imageBitmap1: Bitmap? by photoViewViewModel.imageBitmap1.observeAsState()
+    val imageBitmap2: Bitmap? by photoViewViewModel.imageBitmap2.observeAsState()
 
-    photoViewViewModel.getImageBitmap(imageId = imageId)
+    photoViewViewModel.getImageBitmap(imageId1 = imageId1, imageId2 = imageId2)
 
     Scaffold(topBar = {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -53,20 +55,17 @@ fun PhotoViewScreen(
     }) { paddingValues ->
         BoxWithConstraints(modifier = Modifier.padding(paddingValues)) {
             if (error == null) {
-                when (imageBitmap) {
-                    null -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                modifier = Modifier.align(Alignment.Center), text = "読み込み中..."
-                            )
-                        }
+                if (imageBitmap1 == null && imageBitmap2 == null) {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            modifier = Modifier.align(Alignment.Center), text = "読み込み中..."
+                        )
                     }
-                    else -> {
-                        ImageView(bitmap = imageBitmap!!)
-                    }
+                } else {
+                    ImageView()
                 }
             } else {
                 Box(
@@ -82,9 +81,12 @@ fun PhotoViewScreen(
     }
 }
 
+/**
+ * 閲覧用ImageView
+ * 画像配置情報はPhotoViewModel
+ */
 @Composable
 private fun ImageView(
-    bitmap: Bitmap,
     viewModel: PhotoViewViewModel = hiltViewModel(),
 ) {
     Canvas(
@@ -107,7 +109,7 @@ private fun ImageView(
 
         viewModel.getImageFrames().forEach { frame ->
             drawImage(
-                image = bitmap.asImageBitmap(),
+                image = frame.bitmap.asImageBitmap(),
                 srcSize = frame.size,
                 dstOffset = IntOffset(frame.originPoint.x, frame.originPoint.y)
             )

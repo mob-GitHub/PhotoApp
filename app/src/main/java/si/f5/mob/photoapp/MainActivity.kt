@@ -33,11 +33,13 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.Main.route) {
                             MainScreen(navController = navController)
                         }
-                        composable("${Screen.PhotoView.route}/{imageId}") {
-                            val imageId = it.arguments?.getString("imageId")?.toLong()
+                        composable("${Screen.PhotoView.route}/{imageId1}/{imageId2}") {
+                            val imageId1 = it.arguments?.getString("imageId1")?.toLong()
+                            val imageId2 = it.arguments?.getString("imageId2")?.toLong()
                             PhotoViewScreen(
                                 navController = navController,
-                                imageId = imageId
+                                imageId1 = imageId1,
+                                imageId2 = imageId2
                             )
                         }
                     }
