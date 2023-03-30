@@ -82,5 +82,7 @@ dependencies {
     implementation "io.coil-kt:coil:${versions.coil}"
     implementation "io.coil-kt:coil-compose:${versions.coil}"
 
-    testImplementation project(":test")
+    testImplementation project(':test')
+
+    androidTestImplementation project(':test')
 }
