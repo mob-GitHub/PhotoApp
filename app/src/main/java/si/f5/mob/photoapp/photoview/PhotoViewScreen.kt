@@ -1,6 +1,7 @@
 package si.f5.mob.photoapp.photoview
 
 import android.graphics.Bitmap
+import android.graphics.Rect
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -34,11 +35,16 @@ fun PhotoViewScreen(
     imageId1: Long?,
     imageId2: Long?
 ) {
+    var isGetImage by remember { mutableStateOf(false) }
     val error by photoViewViewModel.error.observeAsState()
     val imageBitmap1: Bitmap? by photoViewViewModel.imageBitmap1.observeAsState()
     val imageBitmap2: Bitmap? by photoViewViewModel.imageBitmap2.observeAsState()
+    val rectList: List<Rect>? by photoViewViewModel.rectList.observeAsState()
 
-    photoViewViewModel.getImageBitmap(imageId1 = imageId1, imageId2 = imageId2)
+    if (!isGetImage) {
+        photoViewViewModel.getImageBitmap(imageId1 = imageId1, imageId2 = imageId2)
+        isGetImage = true
+    }
 
     Scaffold(topBar = {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -53,7 +59,7 @@ fun PhotoViewScreen(
     }) { paddingValues ->
         BoxWithConstraints(modifier = Modifier.padding(paddingValues)) {
             if (error == null) {
-                if (imageBitmap1 == null && imageBitmap2 == null) {
+                if (imageBitmap1 == null || imageBitmap2 == null || rectList == null) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -87,6 +93,8 @@ fun PhotoViewScreen(
 private fun ImageView(
     viewModel: PhotoViewViewModel = hiltViewModel(),
 ) {
+    val rect = if (viewModel.rectList.value!!.isNotEmpty()) viewModel.rectList.value!![0] else null
+    val srcOffset = if (rect != null) IntOffset(rect.left, rect.top) else IntOffset.Zero
     Canvas(
         modifier = Modifier
             .aspectRatio(1f)
@@ -109,6 +117,7 @@ private fun ImageView(
             drawImage(
                 image = frame.bitmap.asImageBitmap(),
                 srcSize = frame.size,
+                srcOffset = srcOffset,
                 dstOffset = IntOffset(frame.originPoint.x, frame.originPoint.y)
             )
         }

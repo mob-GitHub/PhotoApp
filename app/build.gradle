@@ -82,6 +82,9 @@ dependencies {
     implementation "io.coil-kt:coil:${versions.coil}"
     implementation "io.coil-kt:coil-compose:${versions.coil}"
 
+    // Object Detection
+    implementation 'com.google.mlkit:object-detection:17.0.0'
+
     testImplementation project(':test')
 
     androidTestImplementation project(':test')
