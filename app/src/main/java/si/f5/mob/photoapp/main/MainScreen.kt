@@ -100,8 +100,7 @@ fun MainScreen(mainViewModel: MainViewModel = hiltViewModel(), navController: Na
                     .align(Alignment.BottomCenter)
                     .background(Color.White),
                 onClick = {
-                    val imageId = imageList.filter { it.isSelected }
-                    navController.navigate("photoview/${imageId[0].image.id}/${imageId[1].image.id}")
+                    navController.navigate(Screen.PhotoView.route)
                 },
                 enabled = selectedImageCount == Config.PHOTO_SELECT_COUNT_MAX
             ) {

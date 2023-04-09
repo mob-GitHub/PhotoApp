@@ -32,8 +32,6 @@ import si.f5.mob.photoapp.Screen
 fun PhotoViewScreen(
     photoViewViewModel: PhotoViewViewModel = hiltViewModel(),
     navController: NavController,
-    imageId1: Long?,
-    imageId2: Long?
 ) {
     var isGetImage by remember { mutableStateOf(false) }
     val error by photoViewViewModel.error.observeAsState()
@@ -42,7 +40,7 @@ fun PhotoViewScreen(
     val rectList: List<Rect>? by photoViewViewModel.rectList.observeAsState()
 
     if (!isGetImage) {
-        photoViewViewModel.getImageBitmap(imageId1 = imageId1, imageId2 = imageId2)
+        photoViewViewModel.getImageBitmap()
         isGetImage = true
     }
 

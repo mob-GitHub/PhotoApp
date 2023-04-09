@@ -33,7 +33,8 @@ android {
 }
 
 dependencies {
-    implementation project(":common")
+    implementation project(':common')
+    implementation project(':data:mediastore')
 
     // Hilt
     implementation "com.google.dagger:hilt-android:${versions.hilt}"

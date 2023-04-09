@@ -1,7 +1,6 @@
 package si.f5.mob.photoapp.photoview
 
 import android.app.Application
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.graphics.Rect
@@ -21,17 +20,17 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.objects.ObjectDetection
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import si.f5.mob.mediastore.MediaStore
 import si.f5.mob.photoapp.BaseViewModel
+import si.f5.mob.photoapp.ImageRepository
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class PhotoViewViewModel @Inject constructor(
     private val mediaStore: MediaStore,
-    @ApplicationContext private val context: Context,
+    private val imageRepository: ImageRepository,
     application: Application
 ) : BaseViewModel(application) {
 
@@ -60,13 +59,11 @@ class PhotoViewViewModel @Inject constructor(
     val clickedImageId: LiveData<Long?>
         get() = _clickedImageId
 
-    fun getImageBitmap(imageId1: Long?, imageId2: Long?) = viewModelScope.launch {
-        if (imageId1 == null || imageId2 == null) {
-            setError(IllegalStateException("画像情報がない"))
-        }
+    fun getImageBitmap() = viewModelScope.launch {
+        val imageList = imageRepository.selectedImageList
 
-        val image1 = mediaStore.getImageUriById(imageId1!!)
-        val image2 = mediaStore.getImageUriById(imageId2!!)
+        val image1 = mediaStore.getImageUriById(imageList[0].id)
+        val image2 = mediaStore.getImageUriById(imageList[1].id)
         if (image1 == null || image2 == null) {
             setError(IllegalStateException("画像情報がない"))
         }
@@ -107,6 +104,7 @@ class PhotoViewViewModel @Inject constructor(
     }
 
     fun getObjectDetection(name: String, uri: Uri) {
+        val context = getApplication<Application>().applicationContext
         val options = ObjectDetectorOptions.Builder()
             // 単一画像解析モード（解析時間が長くなるが、正確性が向上）
             .setDetectorMode(ObjectDetectorOptions.SINGLE_IMAGE_MODE)

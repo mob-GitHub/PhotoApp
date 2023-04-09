@@ -6,11 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import si.f5.mob.mediastore.MediaStore
 import si.f5.mob.photoapp.BaseViewModel
+import si.f5.mob.photoapp.ImageRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val mediaStore: MediaStore,
+    private val imageRepository: ImageRepository,
     application: Application
 ) : BaseViewModel(application) {
     private val _imageList = MutableLiveData<List<GridItemData>>(listOf())
@@ -37,5 +39,7 @@ class MainViewModel @Inject constructor(
         selectedImage.isSelected = value
         _imageList.postValue(_imageList.value)
         _selectedImageCount.postValue(_imageList.value?.filter { it.isSelected }?.size ?: 0)
+        imageRepository.setSelectedImageList(_imageList.value!!.filter { it.isSelected }
+            .map { it.image })
     }
 }
