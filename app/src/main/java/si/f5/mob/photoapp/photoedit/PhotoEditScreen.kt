@@ -2,9 +2,11 @@ package si.f5.mob.photoapp.photoedit
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,7 +18,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -38,6 +42,14 @@ fun PhotoEditScreen(
     photoEditViewModel: PhotoEditViewModel = hiltViewModel(),
 ) {
     val image = photoEditViewModel.getImage(imageId)
+    var scale by remember { mutableStateOf(1F) }
+    var offset by remember { mutableStateOf(Offset.Zero) }
+    val transformableState = rememberTransformableState { zoomChange, panChange, _ ->
+        if ((scale * zoomChange) >= 1F && (scale * zoomChange) <= 3F) {
+            scale *= zoomChange
+        }
+        offset += panChange
+    }
 
     Scaffold(topBar = {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -56,7 +68,15 @@ fun PhotoEditScreen(
                 .padding(it)
         ) {
             SubcomposeAsyncImage(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .graphicsLayer {
+                        scaleX = scale
+                        scaleY = scale
+                        translationX = offset.x
+                        translationY = offset.y
+                    }
+                    .transformable(transformableState)
+                    .fillMaxSize(),
                 model = image.uri,
                 contentDescription = null,
                 loading = {
@@ -108,41 +128,57 @@ private fun EditImageView(bitmap: Bitmap) {
 private fun TrimmingGrid(modifier: Modifier = Modifier) {
     val framePoint = Config.FRAME_SIZE.toFloat()
     val outLineStroke = 5F
-    val gridOffsetList = listOf(
-        Pair(Offset(framePoint / 3, 0F), Offset(framePoint / 3, framePoint)),
-        Pair(Offset(framePoint / 3 * 2, 0F), Offset(framePoint / 3 * 2, framePoint)),
-        Pair(Offset(0F, framePoint / 3), Offset(framePoint, framePoint / 3)),
-        Pair(Offset(0F, framePoint / 3 * 2), Offset(framePoint, framePoint / 3 * 2))
-    )
 
     Canvas(
-        modifier = modifier.sizeIn()
+        modifier = modifier
+            .fillMaxSize()
+            .focusable(enabled = false)
     ) {
-        drawRect(color = Color.Transparent, size = size)
+        val left = (size.width - framePoint) / 2
+        val top = (size.height - framePoint) / 2
+        val originPoint = Offset(left, top)
+        val gridOffsetList = listOf(
+            Pair(
+                Offset(left + framePoint / 3, top),
+                Offset(left + framePoint / 3, top + framePoint)
+            ),
+            Pair(
+                Offset(left + framePoint / 3 * 2, top),
+                Offset(left + framePoint / 3 * 2, top + framePoint)
+            ),
+            Pair(
+                Offset(left, top + framePoint / 3),
+                Offset(left + framePoint, top + framePoint / 3)
+            ),
+            Pair(
+                Offset(left, top + framePoint / 3 * 2),
+                Offset(left + framePoint, top + framePoint / 3 * 2)
+            )
+        )
 
         // 外枠
         drawLine(
             color = Color.Red,
-            start = Offset.Zero,
-            end = Offset(0F, framePoint),
+            start = originPoint,
+            end = Offset(left, top + framePoint),
             strokeWidth = outLineStroke
         )
         drawLine(
             color = Color.Red,
-            start = Offset(0F, framePoint),
-            end = Offset(framePoint, framePoint),
+            start = Offset(left, top + framePoint),
+            end = Offset(size.width - left, top + framePoint),
             strokeWidth = outLineStroke
         )
         drawLine(
             color = Color.Red,
-            start = Offset(framePoint, framePoint),
-            end = Offset(framePoint, 0F),
+            start = Offset(size.width - left, top + framePoint),
+            end = Offset(size.width - left, top),
             strokeWidth = outLineStroke
         )
         drawLine(
             color = Color.Red,
-            start = Offset(framePoint, 0F),
-            end = Offset.Zero,
+            start = originPoint,
+            end = Offset(size.width - left, top),
             strokeWidth = outLineStroke
         )
 
