@@ -4,4 +4,5 @@
     <!-- スクリーン名 -->
     <string name="screen_main">端末内の画像一覧</string>
     <string name="screen_photo_view">ビューア</string>
+    <string name="screen_photo_edit">編集</string>
 </resources>

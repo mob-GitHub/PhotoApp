@@ -6,4 +6,7 @@ object Config {
 
     // 写真選択枚数
     const val PHOTO_SELECT_COUNT_MAX = 2
+
+    // 枠のサイズ
+    const val FRAME_SIZE = 1000
 }

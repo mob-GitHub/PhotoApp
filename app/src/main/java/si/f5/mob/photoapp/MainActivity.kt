@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import si.f5.mob.photoapp.main.MainScreen
+import si.f5.mob.photoapp.photoedit.PhotoEditScreen
 import si.f5.mob.photoapp.photoview.PhotoViewScreen
 
 @AndroidEntryPoint
@@ -35,6 +36,13 @@ class MainActivity : ComponentActivity() {
                         }
                         composable(Screen.PhotoView.route) {
                             PhotoViewScreen(navController = navController)
+                        }
+                        composable(
+                            route = "${Screen.PhotoEdit.route}/{imageId}"
+                        ) {
+                            val imageId = it.arguments?.getString("imageId")?.toLong()
+                                ?: throw IllegalStateException("引数異常")
+                            PhotoEditScreen(navController = navController, imageId = imageId)
                         }
                     }
                 }
