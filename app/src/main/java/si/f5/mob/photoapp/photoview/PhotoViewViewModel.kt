@@ -2,11 +2,7 @@ package si.f5.mob.photoapp.photoview
 
 import android.app.Application
 import android.graphics.Bitmap
-import android.graphics.Point
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.unit.IntSize
-import androidx.core.graphics.drawable.toBitmapOrNull
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -20,6 +16,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import si.f5.mob.mediastore.MediaStore
+import si.f5.mob.mediastore.entity.Image
 import si.f5.mob.photoapp.BaseViewModel
 import si.f5.mob.photoapp.ImageRepository
 import timber.log.Timber
@@ -33,26 +30,14 @@ class PhotoViewViewModel @Inject constructor(
 ) : BaseViewModel(application) {
 
     data class ImageFrame(
+        val image: Image,
         val bitmap: Bitmap,
-        val size: IntSize,
-        val originPoint: Point,
-        val diagonalPoint: Point = Point(originPoint.x + size.width, originPoint.y + size.height),
     )
 
     sealed interface Event {
         object None : Event
         class NavigateEditView(val imageId: Long) : Event
     }
-
-    private val _imageBitmap1 = MutableLiveData<Bitmap?>()
-    val imageBitmap1: LiveData<Bitmap?>
-        get() = _imageBitmap1
-
-    private val _imageBitmap2 = MutableLiveData<Bitmap?>()
-    val imageBitmap2: LiveData<Bitmap?>
-        get() = _imageBitmap2
-
-    private var _canvasSize: Size = Size(0F, 0F)
 
     private val _clickedImageId = MutableLiveData<Long?>()
     val clickedImageId: LiveData<Long?>
@@ -61,6 +46,10 @@ class PhotoViewViewModel @Inject constructor(
     private val _event = MutableStateFlow<Event>(Event.None)
     val event: StateFlow<Event>
         get() = _event
+
+    private val _imageList = MutableStateFlow<List<ImageFrame>>(listOf())
+    val imageList: StateFlow<List<ImageFrame>>
+        get() = _imageList
 
     fun getImageBitmap() = viewModelScope.launch {
         val imageList = imageRepository.selectedImageList
@@ -79,7 +68,7 @@ class PhotoViewViewModel @Inject constructor(
             .build()
         val result1 = when (val result = ImageLoader(getApplication()).execute(request1)) {
             is SuccessResult -> {
-                result.drawable
+                result.drawable.toBitmap()
             }
             is ErrorResult -> {
                 setError(IllegalStateException("画像取得に失敗"))
@@ -91,7 +80,7 @@ class PhotoViewViewModel @Inject constructor(
             .build()
         val result2 = when (val result = ImageLoader(getApplication()).execute(request2)) {
             is SuccessResult -> {
-                result.drawable
+                result.drawable.toBitmap()
             }
             is ErrorResult -> {
                 setError(IllegalStateException("画像取得に失敗"))
@@ -99,39 +88,25 @@ class PhotoViewViewModel @Inject constructor(
             }
         }
 
-        _imageBitmap1.postValue(result1?.toBitmapOrNull())
-        _imageBitmap2.postValue(result2?.toBitmapOrNull())
+        _imageList.update {
+            listOf(
+                ImageFrame(
+                    image1,
+                    result1!!
+                ),
+                ImageFrame(
+                    image2,
+                    result2!!
+                )
+            )
+        }
     }
 
     fun clearEvent() {
         _event.update { Event.None }
     }
 
-    fun onClickedCanvas(offset: Offset) {
-        getImageFrames().forEachIndexed { index, imageFrame ->
-            if (offset.x >= imageFrame.originPoint.x && offset.y >= imageFrame.originPoint.y
-                && offset.x <= imageFrame.diagonalPoint.x && offset.y <= imageFrame.diagonalPoint.y
-            ) {
-                Timber.d("clickedIndex = $index")
-                val imageId = imageRepository.selectedImageList[index].id
-                _event.update { Event.NavigateEditView(imageId) }
-            }
-        }
+    fun onClickedCanvas(imageId: Long) {
+        _event.update { Event.NavigateEditView(imageId) }
     }
-
-    fun setCanvasSize(canvasSize: Size) {
-        _canvasSize = canvasSize
-    }
-
-    fun getImageFrames() = listOf(
-        ImageFrame(imageBitmap1.value!!, getImageSize(_canvasSize), Point(50, 50)),
-        ImageFrame(
-            imageBitmap2.value!!,
-            getImageSize(_canvasSize),
-            Point(getImageSize(_canvasSize).width + 50, getImageSize(_canvasSize).height + 50)
-        )
-    )
-
-    private fun getImageSize(canvasSize: Size) =
-        IntSize(canvasSize.width.toInt() / 2 - 50, canvasSize.height.toInt() / 2 - 50)
 }

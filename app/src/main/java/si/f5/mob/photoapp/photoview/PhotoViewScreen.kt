@@ -1,6 +1,8 @@
 package si.f5.mob.photoapp.photoview
 
 import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.graphics.Point
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,12 +21,14 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import si.f5.mob.photoapp.PhotoAppTopAppBar
 import si.f5.mob.photoapp.Screen
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,8 +39,7 @@ fun PhotoViewScreen(
     var isGetImage by remember { mutableStateOf(false) }
     val error by photoViewViewModel.error.observeAsState()
     val event by photoViewViewModel.event.collectAsState()
-    val imageBitmap1: Bitmap? by photoViewViewModel.imageBitmap1.observeAsState()
-    val imageBitmap2: Bitmap? by photoViewViewModel.imageBitmap2.observeAsState()
+    val imageList by photoViewViewModel.imageList.collectAsState()
 
     if (!isGetImage) {
         photoViewViewModel.getImageBitmap()
@@ -65,10 +68,9 @@ fun PhotoViewScreen(
     }) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
             if (error == null) {
-                if (imageBitmap1 == null || imageBitmap2 == null) {
+                if (imageList.isEmpty()) {
                     Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
+                        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                     ) {
                         Text(
                             modifier = Modifier.align(Alignment.Center), text = "読み込み中..."
@@ -79,8 +81,7 @@ fun PhotoViewScreen(
                 }
             } else {
                 Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                 ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center), text = "画像の読み込みに失敗しました。"
@@ -99,6 +100,9 @@ fun PhotoViewScreen(
 private fun ImageView(
     viewModel: PhotoViewViewModel = hiltViewModel(),
 ) {
+    var imageSize by remember { mutableStateOf(IntSize.Zero) }
+    var originPoints by remember { mutableStateOf(listOf<IntOffset>()) }
+
     Canvas(
         modifier = Modifier
             .aspectRatio(1f)
@@ -107,21 +111,42 @@ private fun ImageView(
             .clickable(role = Role.Image, onClick = {})
             .pointerInput(Unit) {
                 detectTapGestures { offset ->
-                    viewModel.onClickedCanvas(offset)
+                    viewModel.imageList.value.forEachIndexed { index, imageFrame ->
+                        val diagonalPoint = Point(
+                            originPoints[index].x + size.width,
+                            originPoints[index].y + size.height
+                        )
+                        if (offset.x >= originPoints[index].x && offset.y >= originPoints[index].y
+                            && offset.x <= diagonalPoint.x && offset.y <= diagonalPoint.y
+                        ) {
+                            Timber.d("clickedIndex = $index")
+                            viewModel.onClickedCanvas(imageFrame.image.id)
+                        }
+                    }
                 }
             }
     ) {
-        // ViewModelにCanvasサイズを通知
-        viewModel.setCanvasSize(size)
-
         // 背景
         drawRect(color = Color.White, size = size)
 
-        viewModel.getImageFrames().forEach { frame ->
+        imageSize = IntSize(size.width.toInt() / 2 - 50, size.height.toInt() / 2 - 50)
+        originPoints = listOf(
+            IntOffset(50, 50),
+            IntOffset(imageSize.width + 50, imageSize.height + 50)
+        )
+
+        viewModel.imageList.value.forEachIndexed { index, frame ->
+            val matrix = Matrix()
+            val scaleX = imageSize.width / frame.image.width
+            val scaleY = imageSize.height / frame.image.height
+            matrix.setScale(scaleX.toFloat(), scaleY.toFloat())
+            val imageBitmap =
+                Bitmap.createScaledBitmap(frame.bitmap, imageSize.width, imageSize.height, true)
+
             drawImage(
-                image = frame.bitmap.asImageBitmap(),
-                srcSize = frame.size,
-                dstOffset = IntOffset(frame.originPoint.x, frame.originPoint.y)
+                image = imageBitmap.asImageBitmap(),
+                srcSize = imageSize,
+                dstOffset = originPoints[index]
             )
         }
     }
