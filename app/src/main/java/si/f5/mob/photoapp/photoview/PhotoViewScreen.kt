@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.Point
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntOffset
@@ -26,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import coil.compose.AsyncImage
 import si.f5.mob.photoapp.PhotoAppTopAppBar
 import si.f5.mob.photoapp.Screen
 import timber.log.Timber
@@ -57,7 +60,7 @@ fun PhotoViewScreen(
 
     Scaffold(topBar = {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val navButtonVisible = navBackStackEntry?.destination?.route != Screen.PhotoView.route
+        val navButtonVisible = true
         PhotoAppTopAppBar(
             title = stringResource(Screen.PhotoView.resourceId),
             navButtonVisible = navButtonVisible,
@@ -77,7 +80,7 @@ fun PhotoViewScreen(
                         )
                     }
                 } else {
-                    ImageView()
+                    ImageView(imageList)
                 }
             } else {
                 Box(
@@ -97,7 +100,7 @@ fun PhotoViewScreen(
  * 画像配置情報はPhotoViewModel
  */
 @Composable
-private fun ImageView(
+private fun ImageViewCanvas(
     viewModel: PhotoViewViewModel = hiltViewModel(),
 ) {
     var imageSize by remember { mutableStateOf(IntSize.Zero) }
@@ -149,5 +152,46 @@ private fun ImageView(
                 dstOffset = originPoints[index]
             )
         }
+    }
+}
+
+@Composable
+fun ImageView(
+    imageList: List<PhotoViewViewModel.ImageFrame>,
+    modifier: Modifier = Modifier,
+    viewModel: PhotoViewViewModel = hiltViewModel()
+) {
+    val imageSize = 400 / 2
+
+    Box(
+        modifier = Modifier
+            .size(400.dp)
+            .offset(10.dp, 10.dp)
+            .background(color = Color.White)
+            .border(width = 1.dp, color = Color.Gray)
+    ) {
+        AsyncImage(
+            modifier = Modifier
+                .size(imageSize.dp)
+                .padding(top = 10.dp, start = 10.dp)
+                .clickable {
+                    viewModel.onClickedCanvas(imageList[0].image.id)
+                },
+            model = imageList[0].bitmap,
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
+        AsyncImage(
+            modifier = Modifier
+                .size(imageSize.dp)
+                .padding(bottom = 10.dp, end = 10.dp)
+                .offset(imageSize.dp, imageSize.dp)
+                .clickable {
+                    viewModel.onClickedCanvas(imageList[1].image.id)
+                },
+            model = imageList[1].bitmap,
+            contentDescription = null,
+            contentScale = ContentScale.Crop
+        )
     }
 }
