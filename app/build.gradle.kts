@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
@@ -45,7 +47,7 @@ android {
     }
     kotlinOptions {
         jvmTarget = buildConfig["jvmTarget"] as String
-        freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
+        freeCompilerArgs = freeCompilerArgs + listOf("-opt-in=kotlin.RequiresOptIn")
     }
 }
 

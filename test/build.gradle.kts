@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -11,8 +13,6 @@ android {
 
     defaultConfig {
         minSdk = buildConfig["minSdk"] as Int
-        targetSdk = buildConfig["compileSdk"] as Int
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }

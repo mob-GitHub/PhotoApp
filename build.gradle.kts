@@ -1,5 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
+    @Suppress("UNUSED_VARIABLE")
     val buildConfig: Map<String, Any> by extra {
         mapOf(
             "compileSdk" to 33,
