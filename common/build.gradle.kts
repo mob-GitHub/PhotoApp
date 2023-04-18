@@ -4,7 +4,6 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -38,17 +37,15 @@ android {
 }
 
 dependencies {
-    val versions: Map<String, String> by project
-
     // Timber
-    api("com.jakewharton.timber:timber:${versions["timber"]}")
+    api(libs.timber)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:${versions["hilt"]}")
-    kapt("com.google.dagger:hilt-android-compiler:${versions["hilt"]}")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     // Kotlin Coroutine
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    api(libs.kotlinx.coroutines.android)
 
     testImplementation(project(":test"))
 }

@@ -9,13 +9,6 @@ buildscript {
             "jvmTarget" to "11"
         )
     }
-    val versions: Map<String, String> by extra {
-        mapOf(
-            "compose" to "1.3.1",
-            "hilt" to "2.45",
-            "timber" to "4.7.1"
-        )
-    }
     repositories {
         google()
         mavenCentral()

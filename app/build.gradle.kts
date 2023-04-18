@@ -52,8 +52,6 @@ android {
 }
 
 dependencies {
-    val versions: Map<String, String> by project
-
     implementation(project(":common"))
     implementation(project(":data:mediastore"))
 
