@@ -11,12 +11,9 @@ buildscript {
     }
     val versions: Map<String, String> by extra {
         mapOf(
-            "kotlin" to "1.8.10",
             "compose" to "1.3.1",
             "hilt" to "2.45",
-            "timber" to "4.7.1",
-            "navigation" to "2.5.3",
-            "coil" to "2.2.2"
+            "timber" to "4.7.1"
         )
     }
     repositories {
@@ -25,8 +22,8 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:7.4.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${versions["kotlin"]}")
-        classpath("com.google.dagger:hilt-android-gradle-plugin:${versions["hilt"]}")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
+        classpath(libs.hilt.gradlePlugin)
     }
 }
 tasks.create<Delete>("clean") {

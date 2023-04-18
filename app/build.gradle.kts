@@ -57,39 +57,38 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":data:mediastore"))
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.accompanist:accompanist-permissions:0.29.1-alpha")
+    implementation(libs.androidx.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.accompanist.permissions)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:${versions["hilt"]}")
-    kapt("com.google.dagger:hilt-android-compiler:${versions["hilt"]}")
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation)
 
     // Jetpack Compose
-    val composeBom = platform("androidx.compose:compose-bom:2023.01.00")
-    implementation(composeBom)
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-tooling")
-    implementation("androidx.compose.animation:animation")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material:material-icons-core")
-    implementation("androidx.compose.material:material-icons-extended")
-    implementation("androidx.compose.runtime:runtime-livedata")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
-    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.animation)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.activity.compose)
 
     // Navigation
-    implementation("androidx.navigation:navigation-compose:${versions["navigation"]}")
-    implementation("androidx.navigation:navigation-fragment-ktx:${versions["navigation"]}")
-    implementation("androidx.navigation:navigation-ui-ktx:${versions["navigation"]}")
-    implementation("androidx.navigation:navigation-runtime-ktx:${versions["navigation"]}")
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:${versions["navigation"]}")
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
+    implementation(libs.androidx.navigation.runtime)
+    implementation(libs.androidx.navigation.dynamic.features.fragment)
 
     // Coil
-    implementation("io.coil-kt:coil:${versions["coil"]}")
-    implementation("io.coil-kt:coil-compose:${versions["coil"]}")
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
     testImplementation(project(":test"))
 
