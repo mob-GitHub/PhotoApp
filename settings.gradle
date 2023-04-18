@@ -13,9 +13,9 @@ gradleEnterprise {
         termsOfServiceUrl = "https://gradle.com/terms-of-service"
         termsOfServiceAgree = "yes"
         obfuscation {
-            username { name -> name.reverse() }
-            hostname { host -> host.collect { character -> Character.getNumericValue(character as char) }.join("-") }
-            ipAddresses { addresses -> addresses.collect { address -> "0.0.0.0" } }
+            username { name -> name.collect { character -> "" }.join("") }
+            hostname { host -> host.collect { character -> "" }.join("") }
+            ipAddresses { addresses -> addresses.collect { address -> "" } }
         }
     }
 }
