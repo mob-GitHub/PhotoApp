@@ -5,6 +5,20 @@ pluginManagement {
         mavenCentral()
     }
 }
+plugins {
+    id "com.gradle.enterprise" version "3.13"
+}
+gradleEnterprise {
+    buildScan {
+        termsOfServiceUrl = "https://gradle.com/terms-of-service"
+        termsOfServiceAgree = "yes"
+        obfuscation {
+            username { name -> name.reverse() }
+            hostname { host -> host.collect { character -> Character.getNumericValue(character as char) }.join("-") }
+            ipAddresses { addresses -> addresses.collect { address -> "0.0.0.0" } }
+        }
+    }
+}
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
