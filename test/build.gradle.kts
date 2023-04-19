@@ -36,7 +36,7 @@ android {
 }
 
 dependencies {
-    api("junit:junit:4.13.2")
-    api("androidx.test.ext:junit:1.1.5")
-    api("androidx.test.espresso:espresso-core:3.5.1")
+    api(libs.junit)
+    api(libs.androidx.junit)
+    api(libs.androidx.espresso.core)
 }

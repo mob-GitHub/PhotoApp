@@ -4,7 +4,6 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.kapt")
-    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -38,13 +37,11 @@ android {
 }
 
 dependencies {
-    val versions: Map<String, String> by project
-
     implementation(project(":common"))
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:${versions["hilt"]}")
-    kapt("com.google.dagger:hilt-android-compiler:${versions["hilt"]}")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     testImplementation(project(":test"))
 }
