@@ -7,7 +7,7 @@ coil = "2.2.2"
 [libraries]
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version = "1.9.0" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version = "1.6.1" }
-androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2023.01.00" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version = "2023.04.00" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation" }
