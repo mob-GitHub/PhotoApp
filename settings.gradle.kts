@@ -6,16 +6,16 @@ pluginManagement {
     }
 }
 plugins {
-    id "com.gradle.enterprise" version "3.13"
+    id("com.gradle.enterprise") version "3.13"
 }
 gradleEnterprise {
     buildScan {
         termsOfServiceUrl = "https://gradle.com/terms-of-service"
         termsOfServiceAgree = "yes"
         obfuscation {
-            username { name -> name.collect { character -> "" }.join("") }
-            hostname { host -> host.collect { character -> "" }.join("") }
-            ipAddresses { addresses -> addresses.collect { address -> "" } }
+            username { name -> "" }
+            hostname { hostname -> "" }
+            ipAddresses { addresses -> addresses.map { address -> "" } }
         }
     }
 }
@@ -27,8 +27,8 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "PhotoApp"
-include ':app'
-include ':common'
-include ':repository'
-include ':data:mediastore'
-include ':test'
+include(":app")
+include(":common")
+include(":repository")
+include(":data:mediastore")
+include(":test")
