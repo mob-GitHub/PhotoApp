@@ -5,8 +5,8 @@ buildscript {
         mapOf(
             "compileSdk" to 33,
             "minSdk" to 26,
-            "compatibility" to JavaVersion.VERSION_11,
-            "jvmTarget" to "11"
+            "compatibility" to JavaVersion.VERSION_17,
+            "jvmTarget" to "17"
         )
     }
     repositories {
