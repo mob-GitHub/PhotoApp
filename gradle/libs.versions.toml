@@ -39,7 +39,7 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 
 # classpath
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version = "8.0.0" }
-kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.8.10" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.8.20" }
 hilt-gradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "hilt" }
 
 [plugins]
