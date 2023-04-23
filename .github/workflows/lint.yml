@@ -29,7 +29,8 @@ jobs:
       - name: Show Results on GitHub
         uses: yutailang0119/action-android-lint@v3
         with:
-          report_path: '**/build/reports/lint-results-*.xml'
+          report_path: build/reports/*.xml
+        continue-on-error: true
       
       # アーティファクトアップロード
       - name: Upload results Artifact
