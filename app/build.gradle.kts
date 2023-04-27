@@ -67,14 +67,20 @@ dependencies {
 
     // Jetpack Compose
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.animation)
+    // UI
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.animation)
+    // Android Studio Preview support
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    // Icons
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
+    // Integration with LiveData
     implementation(libs.androidx.compose.runtime.livedata)
+    // Integration with ViewModels
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    // Integration with activities
     implementation(libs.androidx.activity.compose)
 
     // Navigation
