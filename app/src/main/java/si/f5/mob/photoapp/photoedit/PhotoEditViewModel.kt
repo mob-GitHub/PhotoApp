@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PhotoEditViewModel @Inject constructor(
-    val imageRepository: ImageRepository,
+    private val imageRepository: ImageRepository,
     application: Application,
 ) : BaseViewModel(application) {
     private val _rectList = MutableLiveData<List<Rect>?>(null)

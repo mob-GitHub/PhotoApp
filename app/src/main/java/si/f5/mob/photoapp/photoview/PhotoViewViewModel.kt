@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import si.f5.mob.mediastore.MediaStore
 import si.f5.mob.mediastore.entity.Image
 import si.f5.mob.photoapp.BaseViewModel
 import si.f5.mob.photoapp.ImageRepository
@@ -24,7 +23,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PhotoViewViewModel @Inject constructor(
-    private val mediaStore: MediaStore,
     private val imageRepository: ImageRepository,
     application: Application
 ) : BaseViewModel(application) {
@@ -54,8 +52,8 @@ class PhotoViewViewModel @Inject constructor(
     fun getImageBitmap() = viewModelScope.launch {
         val imageList = imageRepository.selectedImageList
 
-        val image1 = mediaStore.getImageUriById(imageList[0].id)
-        val image2 = mediaStore.getImageUriById(imageList[1].id)
+        val image1 = imageRepository.getImageUriById(imageList[0].id)
+        val image2 = imageRepository.getImageUriById(imageList[1].id)
         if (image1 == null || image2 == null) {
             setError(IllegalStateException("画像情報がない"))
         }
@@ -70,6 +68,7 @@ class PhotoViewViewModel @Inject constructor(
             is SuccessResult -> {
                 result.drawable.toBitmap()
             }
+
             is ErrorResult -> {
                 setError(IllegalStateException("画像取得に失敗"))
                 null
@@ -82,6 +81,7 @@ class PhotoViewViewModel @Inject constructor(
             is SuccessResult -> {
                 result.drawable.toBitmap()
             }
+
             is ErrorResult -> {
                 setError(IllegalStateException("画像取得に失敗"))
                 null

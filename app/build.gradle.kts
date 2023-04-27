@@ -54,8 +54,6 @@ android {
 dependencies {
     implementation(project(":common"))
     implementation(project(":repository"))
-    // TODO:削除予定
-    implementation(project(":data:mediastore"))
 
     implementation(libs.androidx.ktx)
     implementation(libs.androidx.appcompat)

@@ -3,15 +3,15 @@ package si.f5.mob.photoapp.main
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import si.f5.mob.mediastore.MediaStore
+import kotlinx.coroutines.launch
 import si.f5.mob.photoapp.BaseViewModel
 import si.f5.mob.photoapp.ImageRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val mediaStore: MediaStore,
     private val imageRepository: ImageRepository,
     application: Application
 ) : BaseViewModel(application) {
@@ -24,13 +24,16 @@ class MainViewModel @Inject constructor(
         get() = _selectedImageCount
 
 
-    fun initialize() {
+    fun initialize() = viewModelScope.launch {
         _selectedImageCount.postValue(0)
+
+        imageRepository.imageList.collect { images ->
+            _imageList.postValue(images.map { GridItemData(it) })
+        }
     }
 
-    fun getImageList() {
-        val imageList = mediaStore.getImages().map { GridItemData(it) }
-        _imageList.postValue(imageList)
+    fun getImageList() = viewModelScope.launch {
+        imageRepository.getImageList()
     }
 
     fun setImageIsSelected(imageId: Long, value: Boolean) {
